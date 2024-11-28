@@ -1,0 +1,631 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "CASE CHAIN",
+      "description": "This API Specification for the Case Chain System",
+      "contact": {
+        "email": "mireilleirafasha@gmail.com"
+      },
+      "license": {
+        "name": "MIT",
+        "url": "http://www.opensource.org/licenses/mit"
+      },
+      "version": "1.0.0"
+    },
+    "externalDocs": {
+      "url": "https://github.com/mireilleIrafasha25/Case-Chain-Backend.git",
+      "description": "Find more info here"
+    },
+    "basePath": "/CaseChain",
+    "servers": [
+      {
+        "url": "http://localhost:2005",
+        "description": "Local server"
+      },
+      {
+        "url": "https://Case-Chain-Backend.onrender.com",
+        "description": "production server"
+      }
+    ],
+    "schemes": [
+      "https",
+      "http"
+    ],
+    "tags": [
+      {
+        "name": "CaseChain",
+        "description": "Operation pretaining to case chain"
+      }
+    ],
+    "paths": {
+      "/user/Test":{
+        "get":{
+          "tags":["Users"],
+          "summary": "Test",
+          "description": "Test",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/signup": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Create a new user",
+          "description": "Create a new user",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "User created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request -Validation error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/signin": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Sign in a user",
+          "description": "Sign in a user",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "User logged in successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request -Validation error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/listAll": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Get all user",
+          "description": "Returns all the userzs",
+          "responses": {
+            "200": {
+              "description": "All the users",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/verify": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Verify a user",
+          "description": "Verify a user",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Otp was verified",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request -Validation error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/forgotpassword": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Forgot password",
+          "description": "Forgot password",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Forgot password was successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request -Validation error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/resetpassword": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Reset password",
+          "description": "Reset password",
+          "parameters": [
+              {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Password was reset successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request -Validation error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+    }
+  },
+                 "/contact/add":{
+                  "post":{
+                    "tags":["Contact Us"],
+                    "summary":"Add a contact",
+                    "description":"Add a contact",
+                    "parameters":[
+                      {
+                        "name":"body",
+                        "in":"body",
+                        "required":true,
+                        "schema":{
+                          "$ref":"#/components/schemas/Contact"
+                        }
+                      }
+                    ],
+                    "requestBody":{
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "$ref": "#/components/schemas/Contact"
+                          }
+                        }
+                      }
+  
+                    },
+                    "responses":{
+                      "201": {
+                        "description": "contact added",
+                        "content": {
+                          "application/json": {
+                            "schema": {
+                              "$ref": "#/components/schemas/Contact"
+                            }
+                          }
+                        }
+                      },
+                      "404": {
+                        "description": "contact not found",
+                        "content": {
+                          "application/json": {
+                            "schema": {
+                              "type": "object",
+                              "properties": {
+                                "message": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "/contact/list":{
+                  "get":{
+                    "tags":["Contact Us"],
+                    "summary":"List all contacts",
+                    "description":"List all contacts",
+                    "responses":{
+                      "200": {
+                        "description": "contact listed",
+                        "content": {
+                          "application/json": {
+                            "schema": {
+                              "$ref": "#/components/schemas/Contact"
+                            }
+                          }
+                        }
+                      },
+                      "404": {
+                        "description": "contact not found",
+                        "content": {
+                          "application/json": {
+                            "schema": {
+                              "type": "object",
+                              "properties": {
+                                "message": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "/contact/findbyUser/{id}":{
+                  "get":{
+                    "tags":["Contact Us"],
+                    "summary":"Find a contact by id",
+                    "description":"Find a contact by id",
+                    "parameters": [
+                      {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                          "type": "string"
+                        }
+                      }]
+                  }
+                },
+                "/contact/update/{id}":
+                {
+                  "put":{
+                    "tags":["Contact Us"],
+                    "summary":"Update a contact",
+                    "description":"Update a contact",
+                    "parameters": [
+                      {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                          "$ref": "#/components/schemas/Contact"
+                        }
+                      },
+                      {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                          "type": "string"
+                        }
+                      }],
+                      "requestBody":{
+                        "content": {
+                          "application/json": {
+                            "schema": {
+                              "$ref": "#/components/schemas/Contact"
+                            }
+                          }
+                        }
+                      },
+                      "responses":{
+                        "200":{
+                          "description": "contact updated",
+                          "content": {
+                            "application/json": {
+                              "schema": {
+                                "$ref": "#/components/schemas/Contact"
+                              }
+                            }
+                          }
+                        },
+                        "404":{
+                          "description": "contact not found",
+                          "content": {
+                            "application/json": {
+                              "schema": {
+                                "type": "object",
+                                "properties": {
+                                  "message": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                  }
+                },
+                "/contact/delete/{id}":
+                {
+                  "delete":{
+                    "tags":["Contact Us"],
+                    "summary":"Delete Message",
+                    "description":" delete message with specified id",
+                    "parameters":[
+                      {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "responses":{
+                      "200":{
+                        "description": "contact deleted",
+                        "content": {
+                          "application/json": {
+                            "schema": {
+                              "$ref": "#/components/schemas/Contact"
+                            }
+                          }
+                        }
+                      },
+                      "404":{
+                        "description": "contact not found",
+                        "content": {
+                          "application/json": {
+                            "schema": {
+                              "type": "object",
+                              "properties": {
+                                "message": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+    },
+  
+    "components": {
+      "schemas": {
+        "User": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "name of the User"
+            },
+            "phone": {
+              "type": "string",
+              "description": "phone of the User"
+            },
+            "email": {
+              "type": "string",
+              "description": "email of the User"
+            },
+            "password": {
+              "type": "string",
+              "description": "password of the User"
+            },
+            "confirmPassword": {
+              "type": "string",
+              "description": "confirmpassword of the User"
+            },
+            "role": {
+              "type": "string",
+              "enum":["Umuturage","Mudugudu","Gitifu w'Akagari","Mutwarasibo"],
+              "description": "role of the User"
+            }
+          },
+          "required": [
+            "name",
+            "phone",
+            "password",
+            "email",
+            "role",
+            "confirmPassword"
+          ]
+        },
+        "Contact":{
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "name of the contact"
+            },
+            "email": {
+              "type": "string",
+              "description": "email of the contact"
+            },
+            "message": {
+              "type": "string",
+              "description": "phoneNumber of the contact"
+            }
+          },
+          "required":["email","contact","message"]
+        }
+      }
+    }
+  }
