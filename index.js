@@ -2,11 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import router from './route/index.js';
 import errorHandler from './Middleware/errorHandler.js';
+import documentation from './Doc/swagger.json' assert { type: "json" };
+import swaggerUi from 'swagger-ui-express'
 import dotenv from 'dotenv';
 dotenv.config();
 import cors from "cors"
-import documentation from './Doc/swagger.json' assert{type:"json"};
-import swaggerUi from 'swagger-ui-express'
+
 
 const corsOptions ={
     allowedHeaders: ["Authorization", "Content-Type" ],
