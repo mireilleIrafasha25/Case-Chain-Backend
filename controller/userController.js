@@ -1,7 +1,7 @@
 import UserModel from "../Model/userModel.js";
 import asyncWrapper from "../Middleware/async.js";
 import { otpGenerator } from "../Utils/otp.js";
-import {BadRequestError,UnauthorizedError,NotFoundError} from "../Error/index.js";
+import {BadRequestError,UnauthorizedError} from "../Error/index.js";
 import {validationResult} from 'express-validator';
 import {sendEmail} from '../Utils/sendEmail.js';
 import bcryptjs from 'bcryptjs';
@@ -23,28 +23,33 @@ export const SignUp=asyncWrapper(async(req,res,next)=>
          next(new BadRequestError(errors.array()[0].msg))
     }
     //checking if password match
-    if(req.body.password !== req.body.confirmPassword)
+    if(req.body.Password !== req.body.confirmPassword)
         {
             return next(new BadRequestError("Passwords do not match"));
         }
     // checking  if user is already in using the email
-    const FounderUser=await UserModel.findOne({email:req.body.email})
+    const FounderUser=await UserModel.findOne({email:req.body.Email})
     if(FounderUser)
     {
         return next(new BadRequestError("Email is already in using this email"))
     };
 
     //harshing the user Password
-    const hashedPassword = await bcryptjs.hashSync(req.body.password,10);
+    const hashedPassword = await bcryptjs.hashSync(req.body.Password,10);
     //Generating otp generator
     const otp=otpGenerator();
     const otpExpirationDate= new Date().getTime()+(60*1000*5);
     //Recording the user to the database
     const newUser= new UserModel({
-        name:req.body.name,
-        email:req.body.email,
-        password:hashedPassword,
-        phone:req.body.phone,
+        FullName:req.body.FullName,
+        Province:req.body.Province,
+        District:req.body.District,
+        Sector:req.body.Sector,
+        Cell:req.body.Cell,
+        Village:req.body.Village,
+        Email:req.body.Email,
+        Password:hashedPassword,
+        Telephone:req.body.Telephone,
         role:req.body.role,
         otp: otp,
         otpExpiry:otpExpirationDate
@@ -100,7 +105,7 @@ export const SignIn=asyncWrapper(async(req,res,next)=>
         return next(new BadRequestError(errors.array()[0].msg))
     }
     //find User
-    const FoundUser=await UserModel.findOne({email:req.body.email})
+    const FoundUser=await UserModel.findOne({Email:req.body.Email})
     if(!FoundUser)
     {
         return next(new BadRequestError('Invalid Email or password'))
@@ -112,13 +117,13 @@ export const SignIn=asyncWrapper(async(req,res,next)=>
          return next(new BadRequestError('Account is not verified'))
     }
     //Verify password
-    const isPasswordVerified= await bcryptjs.compareSync(req.body.password,FoundUser.password)
+    const isPasswordVerified= await bcryptjs.compareSync(req.body.Password,FoundUser.Password)
     if(!isPasswordVerified)
     {
         return next(new BadRequestError('Invalid Password'))
     }
     //Generate token
-    const token = jwt.sign({id:FoundUser.id,email:FoundUser.email},process.env.JWT_SECRET_KEY, {expiresIn:'1h'});
+    const token = jwt.sign({id:FoundUser.id,Email:FoundUser.Email},process.env.JWT_SECRET_KEY, {expiresIn:'1h'});
 
     res.status(200).json({
         message:"User account verified!",
@@ -173,7 +178,7 @@ export const ForgotPassword=asyncWrapper(async(req,res,next)=>
         return next(new BadRequestError(errors.array()[0].msg))
     }
     //find User
-    const FoundUser=await UserModel.findOne({email:req.body.email})
+    const FoundUser=await UserModel.findOne({Email:req.body.Email})
     if(!FoundUser)
     {
         return next(new BadRequestError('Invalid Email or password'))
@@ -188,7 +193,7 @@ export const ForgotPassword=asyncWrapper(async(req,res,next)=>
     });
     const link=`https://localhost:8080/reset-password?token=${token}&id=${FoundUser.id}`;
     const emailBody=`click on the link below  to reset your password \n\n${link}`;
-    await sendEmail(req.body.email,"Reset your password",emailBody);
+    await sendEmail(req.body.Email,"Reset your password",emailBody);
 
     res.status(200).json({
         message:"we sent you a reset password link on yourn email"
@@ -202,7 +207,7 @@ export const ResetPassword = asyncWrapper(async (req, res, next) => {
         return next(new BadRequestError(errors.array()[0].msg));
     };
     //checking if password match
-    if(req.body.password !== req.body.confirmPassword)
+    if(req.body.Password !== req.body.confirmPassword)
         {
             return next(new BadRequestError("Passwords do not match"));
         }
@@ -226,9 +231,9 @@ export const ResetPassword = asyncWrapper(async (req, res, next) => {
     // Deleting the user token
     await Token.deleteOne({ token: req.body.token });
     // Harshing the user password
-    const inputedPassword = await bcryptjs.hashSync(req.body.password, 10);
+    const inputedPassword = await bcryptjs.hashSync(req.body.Password, 10);
     // Updating the user password
-    foundUser.password = inputedPassword;
+    foundUser.Password = inputedPassword;
     const savedUser = await foundUser.save();
     if (savedUser) {
         return res.status(200).json({

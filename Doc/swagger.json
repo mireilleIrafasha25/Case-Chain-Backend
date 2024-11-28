@@ -573,19 +573,39 @@
         "User": {
           "type": "object",
           "properties": {
-            "name": {
+            "FullName": {
               "type": "string",
               "description": "name of the User"
             },
-            "phone": {
+            "Telephone": {
               "type": "string",
               "description": "phone of the User"
             },
-            "email": {
+            "Province": {
+              "type": "string",
+              "description": "province of the User"
+            },
+            "District": {
+              "type": "string",
+              "description": "district of the User"
+            },
+            "Sector": {
+              "type":"string",
+              "description": "sector of the User"
+            },
+            "Cell": {
+              "type": "string",
+              "description": "cell of the User"
+            },
+            "Village": {
+              "type": "string",
+              "description": "village of the User"
+            },
+            "Email": {
               "type": "string",
               "description": "email of the User"
             },
-            "password": {
+            "Password": {
               "type": "string",
               "description": "password of the User"
             },
@@ -600,10 +620,15 @@
             }
           },
           "required": [
-            "name",
-            "phone",
-            "password",
-            "email",
+            "FullName",
+            "Telephone",
+            "Province",
+            "District",
+            "Sector",
+            "Cell",
+            "Village",
+            "Password",
+            "Email",
             "role",
             "confirmPassword"
           ]
