@@ -1,6 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import router from './route/index.js';
+import router from './Route/index.js';
 import errorHandler from './Middleware/errorHandler.js';
 import swaggerUi from 'swagger-ui-express';
 import dotenv from 'dotenv';
