@@ -2,7 +2,7 @@ import {addNewContact,ListContact,findbyUser,updateContact,deleteContact} from "
 import express from "express";
 
 const router = express.Router();
-router.post("/add",addNewContact, addNewContact);
+router.post("/add",addNewContact);
 router.get("/list", ListContact);
 router.get("/findbyUser/:id", findbyUser);
 router.put("/update/:id", updateContact);
