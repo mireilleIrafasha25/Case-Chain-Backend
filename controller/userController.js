@@ -28,7 +28,7 @@ export const SignUp=asyncWrapper(async(req,res,next)=>
             return next(new BadRequestError("Passwords do not match"));
         }
     // checking  if user is already in using the email
-    const FounderUser=await UserModel.findOne({email:req.body.Email})
+    const FounderUser=await UserModel.findOne({Email:req.body.Email})
     if(FounderUser)
     {
         return next(new BadRequestError("Email is already in using this email"))
@@ -56,7 +56,7 @@ export const SignUp=asyncWrapper(async(req,res,next)=>
     });
     const savedUser= await newUser.save();
     // console.log(savedUser);
- await sendEmail(req.body.email,"Verify your account",`Your OTP is ${otp}`)
+ await sendEmail(req.body.Email,"Verify your account",`Your OTP is ${otp}`)
  if(savedUser)
  {
     return res.status(201).json({
