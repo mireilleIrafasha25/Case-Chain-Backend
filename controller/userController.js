@@ -49,6 +49,8 @@ export const SignUp=asyncWrapper(async(req,res,next)=>
         Village:req.body.Village,
         Email:req.body.Email,
         Password:hashedPassword,
+        NationalId:req.body.NationalId,
+        Gender:req.body.Gender,
         Telephone:req.body.Telephone,
         role:req.body.role,
         otp: otp,
@@ -56,7 +58,8 @@ export const SignUp=asyncWrapper(async(req,res,next)=>
     });
     const savedUser= await newUser.save();
     // console.log(savedUser);
- await sendEmail(req.body.email,"Verify your account",`Your OTP is ${otp}`)
+  sendEmail(req.body.Email,"Verify your account",`Your OTP is ${otp}`)
+ console.log(req.body.Email)
  if(savedUser)
  {
     return res.status(201).json({
@@ -112,10 +115,10 @@ export const SignIn=asyncWrapper(async(req,res,next)=>
 
     };
     //check account verification
-     if(FoundUser.verified==false)
-     {
-         return next(new BadRequestError('Account is not verified'))
-    }
+    //  if(FoundUser.verified==false)
+    //  {
+    //      return next(new BadRequestError('Account is not verified'))
+    // }
     //Verify password
     const isPasswordVerified= await bcryptjs.compareSync(req.body.Password,FoundUser.Password)
     if(!isPasswordVerified)
@@ -123,7 +126,7 @@ export const SignIn=asyncWrapper(async(req,res,next)=>
         return next(new BadRequestError('Invalid Password'))
     }
     //Generate token
-    const token = jwt.sign({id:FoundUser.id,Email:FoundUser.Email},process.env.JWT_SECRET_KEY, {expiresIn:'1h'});
+    const token = jwt.sign({id:FoundUser.id,Email:FoundUser.Email,NationalId:FoundUser.NationalId},process.env.JWT_SECRET_KEY, {expiresIn:'24h'});
 
     res.status(200).json({
         message:"User account verified!",

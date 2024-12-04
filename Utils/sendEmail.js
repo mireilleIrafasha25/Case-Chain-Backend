@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-export const sendEmail = (recipient, subject, body) => {
+export const sendEmail =  (recipient, subject, body) => {
     const transporter = nodemailer.createTransport({
         service: process.env.EMAIL_SERVICE,
         auth: {
@@ -11,7 +11,7 @@ export const sendEmail = (recipient, subject, body) => {
             rejectUnauthorized: false // Add this line to accept self-signed certificates
         }
     });
-
+ 
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to: recipient,
