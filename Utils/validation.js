@@ -28,7 +28,6 @@ export const signUpValidation=[
   body("Password","Password is required").not().isEmpty(),
   body("Password","Invalid password").isStrongPassword(),
   body("confirmPassword","confirmPassword is required ").not().isEmpty(),
-  body("confirmPassword","Passwords do not match").custom((value, {req}) => value === req.body.Password)
 ];
 
 export const signInValidation=[
@@ -44,3 +43,24 @@ export const addnewMessageValidation = [
     body("email", "email is required").not().isEmpty(),
     body("message", "message is required").not().isEmpty()
 ]
+
+// case validation
+
+export const validateNewCase = [
+    body('caseTitle')
+        .notEmpty().withMessage('Case title is required')
+        .isString().withMessage('Case title must be a string'),
+    body('description')
+        .notEmpty().withMessage('Description is required')
+        .isString().withMessage('Description must be a string'),
+    body('caseOuner')
+        .notEmpty().withMessage('Case owner (National ID) is required')
+        .isString().withMessage('Case owner must be a string'),
+    body('currentLevel')
+        .notEmpty().withMessage('Current level is required')
+        .isIn(['mutwara sibo', 'mudugudu', 'umukuru w\'akagali']).withMessage('Invalid current level'),
+    body('expected_resolution_date')
+        .optional()
+        .isISO8601().withMessage('Expected resolution date must be a valid date')
+
+];

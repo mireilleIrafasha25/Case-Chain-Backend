@@ -47,9 +47,13 @@ export const SignUp=asyncWrapper(async(req,res,next)=>
         District:req.body.District,
         Sector:req.body.Sector,
         Cell:req.body.Cell,
+        Village:req.body.Village,
+        Isibo:req.body.Isibo,
         Email:req.body.Email,
+        NationalID:req.body.NationalID,
+        Gender:req.body.Gender,
         Password:hashedPassword,
-        role:req.body.role,
+        UserType:req.body.UserType,
         otp: otp,
         otpExpires:otpExpirationDate
     });
@@ -111,10 +115,10 @@ export const SignIn=asyncWrapper(async(req,res,next)=>
 
     };
     //check account verification
-     if(FoundUser.verified==false)
-     {
-         return next(new BadRequestError('Account is not verified'))
-    }
+    //  if(FoundUser.verified==false)
+    //  {
+    //      return next(new BadRequestError('Account is not verified'))
+    // }
     //Verify password
     const isPasswordVerified= await bcryptjs.compareSync(req.body.Password,FoundUser.Password)
     if(!isPasswordVerified)
@@ -122,7 +126,7 @@ export const SignIn=asyncWrapper(async(req,res,next)=>
         return next(new BadRequestError('Invalid Password'))
     }
     //Generate token
-    const token = jwt.sign({id:FoundUser.id,Email:FoundUser.Email},process.env.JWT_SECRET_KEY, {expiresIn:'1h'});
+    const token = jwt.sign({id:FoundUser.id,Email:FoundUser.Email,NationalId:FoundUser.NationalId},process.env.JWT_SECRET_KEY, {expiresIn:'24h'});
 
     res.status(200).json({
         message:"User account verified!",
