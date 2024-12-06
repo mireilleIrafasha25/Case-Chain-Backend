@@ -10,7 +10,7 @@ import Token from "../Model/authTokenModel.js";
 import dotenv from "dotenv"
 dotenv.config();
 export const test = (req, res, next) => {
-    res.status(200).json({message:'Hello Justice Advocates!'});
+    res.status(200).json({message:'Hello JusticeAdvocates!'});
 }
 
 export const SignUp=asyncWrapper(async(req,res,next)=>
@@ -42,17 +42,16 @@ export const SignUp=asyncWrapper(async(req,res,next)=>
     //Recording the user to the database
     const newUser= new UserModel({
         FullName:req.body.FullName,
+        Telephone:req.body.Telephone,
         Province:req.body.Province,
         District:req.body.District,
         Sector:req.body.Sector,
         Cell:req.body.Cell,
-        Village:req.body.Village,
         Email:req.body.Email,
         Password:hashedPassword,
-        Telephone:req.body.Telephone,
         role:req.body.role,
         otp: otp,
-        otpExpiry:otpExpirationDate
+        otpExpires:otpExpirationDate
     });
     const savedUser= await newUser.save();
     // console.log(savedUser);
@@ -142,8 +141,7 @@ export const getAllusers =  async (req, res, next) => {
             })
         }
         
-    }
-    catch (error){
+    }catch (error){
         next(error);  
     }}
 

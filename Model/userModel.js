@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   District:{ type: String, required: true},
   Sector:{ type: String, required: true},
   Cell:{ type: String, required: true},
-  Village:{ type: String, required: true},
+  Village:{ type: String, required: false},
   Email: { type: String, unique: true, required: true },
   Password: { type: String, required: true },
   Telephone: { type: String, required: true },
