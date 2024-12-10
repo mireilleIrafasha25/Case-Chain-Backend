@@ -12,10 +12,10 @@ export const addCase = asyncWrapper (async(req,res,next)=>{
 
     const{caseTitle,description,caseOuner,currentLevel,expected_resolution_date} = req.body
   // Extract NationalId from the token
-  const assignedToNationalId = req.user.NationalId;
+  const {NationalID}= req.query;
 
  // Find the user by NationalId
- const user = await UserModel.findOne({ NationalId: assignedToNationalId });
+ const user = await UserModel.findOne({ NationalID:NationalID });
  if (!user) {
      return next(new NotFoundError('User not found'));
  }

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 // User Schema
-const userSchema = new mongoose.Schema({
+const PendingSchema = new mongoose.Schema({
   UserType: {
     type: String,
     enum: ['Umuturage', 'Mutwarasibo', 'Mudugudu'],
@@ -35,5 +35,5 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
-const UserModel = mongoose.model('User', userSchema);
-export default UserModel;
+const PendingModel = mongoose.model('Pending', PendingSchema);
+export default PendingModel;

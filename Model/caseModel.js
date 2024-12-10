@@ -14,7 +14,7 @@ const caseSchema = new schema({
   caseOuner: { type: String, required: true}, // National Id will be provided here
   currentLevel: {
     type: String,
-    enum: [ 'mutwara sibo', 'mudugudu', 'umukuru w\'akagali'],
+    enum: [ 'Mutwarasibo', 'Mudugudu',"Umuturage"],
     required: true
   },
   expected_resolution_date:{type :Date, default: Date.now()+7*24*60*60*1000},

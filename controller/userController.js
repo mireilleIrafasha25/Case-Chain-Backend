@@ -8,66 +8,133 @@ import bcryptjs from 'bcryptjs';
 import jwt from "jsonwebtoken";
 import Token from "../Model/authTokenModel.js";
 import dotenv from "dotenv"
+import PendingModel from "../Model/PendingModel.js";
 dotenv.config();
 export const test = (req, res, next) => {
     res.status(200).json({message:'Hello JusticeAdvocates!'});
 }
 
-export const SignUp=asyncWrapper(async(req,res,next)=>
-{
-// validation
-    const errors= validationResult(req);
-    if(!errors.isEmpty())
-    {
+export const SignUp = asyncWrapper(async (req, res, next) => {
+    // validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
         console.log(errors.array());
-         next(new BadRequestError(errors.array()[0].msg))
+        next(new BadRequestError(errors.array()[0].msg));
     }
-    //checking if password match
-    if(req.body.Password !== req.body.confirmPassword)
-        {
-            return next(new BadRequestError("Passwords do not match"));
-        }
-    // checking  if user is already in using the email
-    const FounderUser=await UserModel.findOne({Email:req.body.Email})
-    if(FounderUser)
-    {
-        return next(new BadRequestError("Email is already in using this email"))
-    };
+    
+    // checking if password matches
+    if (req.body.Password !== req.body.confirmPassword) {
+        return next(new BadRequestError("Passwords do not match"));
+    }
 
-    //harshing the user Password
-    const hashedPassword = await bcryptjs.hashSync(req.body.Password,10);
-    //Generating otp generator
-    const otp=otpGenerator();
-    const otpExpirationDate= new Date().getTime()+(60*1000*5);
-    //Recording the user to the database
-    const newUser= new UserModel({
-        FullName:req.body.FullName,
-        Telephone:req.body.Telephone,
-        Province:req.body.Province,
-        District:req.body.District,
-        Sector:req.body.Sector,
-        Cell:req.body.Cell,
-        Village:req.body.Village,
-        Isibo:req.body.Isibo,
-        Email:req.body.Email,
-        NationalID:req.body.NationalID,
-        Gender:req.body.Gender,
-        Password:hashedPassword,
-        UserType:req.body.UserType,
+    // checking if email is already in use
+    const existingUser = await UserModel.findOne({ NationalID: req.body.NationalID});
+    if (existingUser) {
+        return next(new BadRequestError("NationalID is already in use"));
+    }
+
+    // hashing the user password
+    const hashedPassword = await bcryptjs.hashSync(req.body.Password, 10);
+
+    // generating OTP and setting expiration date
+    const otp = otpGenerator();
+    const otpExpirationDate = new Date().getTime() + (60 * 1000 * 5);
+
+    // if user is a local leader (Mutwarasibo or Mudugudu), save in Pending Users
+    if (req.body.UserType === 'Mutwarasibo' || req.body.UserType === 'Mudugudu') {
+        // Create a new pending user entry
+        const newPendingUser = new PendingModel({
+            FullName: req.body.FullName,
+            Telephone: req.body.Telephone,
+            Province: req.body.Province,
+            District: req.body.District,
+            Sector: req.body.Sector,
+            Cell: req.body.Cell,
+            Village: req.body.Village,
+            Isibo: req.body.Isibo,
+            Email: req.body.Email,
+            NationalID: req.body.NationalID,
+            Gender: req.body.Gender,
+            Password: hashedPassword,
+            UserType: req.body.UserType,
+            otp: otp,
+            otpExpires: otpExpirationDate,
+            approved: false // Mark as not approved
+        });
+     console.log(PendingModel.id)
+        // Save to PendingUsers collection
+        await newPendingUser.save();
+
+        // Send email to Gitifu for approval
+        const emailRecipient = process.env.GEmail;  // Assuming Gitifu email is stored here
+        const emailSubject = "Approval Request for Local Leaders";
+        const htmlBody = `
+        <p>Dear ${process.env.GName},</p>
+        <p>I kindly request your approval for the following individual as a local leader:</p>
+        <p><strong>Name:</strong> John Doe</p>
+        <p><strong>Role:</strong> Mutwarasibo</p>
+        <p><strong>Location:</strong> Indashyikirwa</p>
+        <p>
+            Please confirm their role by clicking one of the options below:
+        </p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://localhost:2005/api_docs/CaseChain/user/approve?userId=${newPendingUser.id}&status=yes"
+                        style="background-color: green; padding: 10px 20px; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">
+                        Approve
+                    </a>
+                </td>
+                <td style="width: 20px;"></td>
+                <td>
+                    <a href="http://localhost:2005/CaseChain/user/approve?userId=${newPendingUser.id}&status=no"
+                        style="background-color: red; padding: 10px 20px; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">
+                        Reject
+                    </a>
+                </td>
+            </tr>
+        </table>
+        <p>Thank you,<br>Case Chain Team</p>
+    `;
+    
+        await sendEmail(emailRecipient, emailSubject, htmlBody);
+
+        return res.status(201).json({
+            message: "Account is pending approval by Gitifu.",
+            user: newPendingUser
+        });
+    }
+
+    // If user is not a local leader, create normal user account
+    const newUser = new UserModel({
+        FullName: req.body.FullName,
+        Telephone: req.body.Telephone,
+        Province: req.body.Province,
+        District: req.body.District,
+        Sector: req.body.Sector,
+        Cell: req.body.Cell,
+        Village: req.body.Village,
+        Isibo: req.body.Isibo,
+        Email: req.body.Email,
+        NationalID: req.body.NationalID,
+        Gender: req.body.Gender,
+        Password: hashedPassword,
+        UserType: req.body.UserType,
         otp: otp,
-        otpExpires:otpExpirationDate
+        otpExpires: otpExpirationDate
     });
-    const savedUser= await newUser.save();
-    // console.log(savedUser);
- await sendEmail(req.body.Email,"Verify your account",`Your OTP is ${otp}`)
- if(savedUser)
- {
-    return res.status(201).json({
-        message:"User account created!",
-        user:savedUser
-    })
- }
+
+    const savedUser = await newUser.save();
+    await sendEmail(req.body.Email, "Verify your account", `Your OTP is ${otp}`);
+    
+    if (savedUser) {
+        return res.status(201).json({
+            message: "User account created!",
+            user: savedUser
+        });
+    }
 });
+
 export const Validateopt=asyncWrapper(async(req,res,next)=>
 {
     //validation 

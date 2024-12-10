@@ -110,6 +110,64 @@
         }
       }
     },
+    "/user/approve":{
+      "get":{
+        "tags": ["Users"],
+        "summary": "Approve a user",
+        "description": "Approve a user",
+        "parameters":[
+          {
+            "name": "Userid",
+            "in": "query",
+            "description": "The unique ID of the user to be approved or rejected.",
+            "required": true,
+            "schema":
+            {
+              "type": "string"
+            }
+          },
+            {
+          "name": "status",
+            "in": "query",
+            "description": "Approval status ('yes' for approve, 'no' for reject).",
+            "required": true,
+            "schema":
+            {
+             " type": "string",
+             "enum": ["yes", "no"]
+            }
+              
+            }
+        ],
+        "responses": {
+          "200": {
+            "description": "User approved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/user/signin": {
       "post": {
         "tags": ["Users"],
@@ -904,7 +962,7 @@
           "type": "object",
           "required": ["otp"],
           "properties":{
-            "Otp":{
+            "otp":{
               "type": "string"
             }
           }
