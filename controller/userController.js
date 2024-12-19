@@ -28,10 +28,13 @@ export const SignUp = asyncWrapper(async (req, res, next) => {
     }
 
     // checking if email is already in use
-    const existingUser = await UserModel.findOne({ NationalID: req.body.NationalID});
+    // const existingUser = await UserModel.findOne({ NationalID: req.body.NationalID});
+    const existingUser = await UserModel.findOne({ NationalID: req.body.NationalID });
+
     if (existingUser) {
         return next(new BadRequestError("NationalID is already in use"));
     }
+    
 
     // hashing the user password
     const hashedPassword = await bcryptjs.hashSync(req.body.Password, 10);
