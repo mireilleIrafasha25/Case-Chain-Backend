@@ -26,7 +26,7 @@ export const signUpValidation=[
   body("Email","Email is required").not().isEmpty(),
   body("Email","Invalid email").isEmail(),
   body("Password","Password is required").not().isEmpty(),
-  body("Password","Invalid password").isStrongPassword(),
+//   body("Password","Invalid password").isStrongPassword(),
   body("confirmPassword","confirmPassword is required ").not().isEmpty(),
 ];
 
