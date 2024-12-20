@@ -731,19 +731,36 @@
         }
       }
     },
-    "/case/getCaseById/{id}": {
-      "get": {
+    "/case/updateCase/{id}": {
+      "put": {
         "tags": ["CaseChain"],
-        "summary": "Get case by ID",
-        "description": "Retrieve a specific case by its ID",
+        "summary": "Update by ID",
+        "description": "Update case by its ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Case"
+            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Case"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Case details",
@@ -773,17 +790,17 @@
         }
       }
     },
-    "/case/updateCase/{id}": {
-      "patch": {
+    "/case/deleteCase/{id}": {
+      "delete": {
         "tags": ["CaseChain"],
-        "summary": "Update case by ID",
-        "description": "Update a case by including the update text and status",
+        "summary": "Delete case by ID",
+        "description": "Delete case by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "The ID of the case to update",
+            "description": "The ID of the case to delete",
             "schema": {
               "type": "string"
             }
@@ -792,7 +809,7 @@
             "name": "body",
             "in": "body",
             "required": true,
-            "description": "Update a case by including only~ update text and status",
+            "description": "Delete case by ID",
             "schema": {
               "$ref": "#/components/schemas/Case"
             }

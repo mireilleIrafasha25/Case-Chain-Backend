@@ -40,71 +40,6 @@ export const SignUp = asyncWrapper(async (req, res, next) => {
     const otp = otpGenerator();
     const otpExpirationDate = new Date().getTime() + (60 * 1000 * 5);
 
-    // if user is a local leader (Mutwarasibo or Mudugudu), save in Pending Users
-    if (req.body.UserType === 'Mutwarasibo' || req.body.UserType === 'Mudugudu') {
-        // Create a new pending user entry
-        const newPendingUser = new PendingModel({
-            FullName: req.body.FullName,
-            Telephone: req.body.Telephone,
-            Province: req.body.Province,
-            District: req.body.District,
-            Sector: req.body.Sector,
-            Cell: req.body.Cell,
-            Village: req.body.Village,
-            Isibo: req.body.Isibo,
-            Email: req.body.Email,
-            NationalID: req.body.NationalID,
-            Gender: req.body.Gender,
-            Password: hashedPassword,
-            UserType: req.body.UserType,
-            otp: otp,
-            otpExpires: otpExpirationDate,
-            approved: false // Mark as not approved
-        });
-     console.log(PendingModel.id)
-        // Save to PendingUsers collection
-        await newPendingUser.save();
-
-        // Send email to Gitifu for approval
-        const emailRecipient = process.env.GEmail;  // Assuming Gitifu email is stored here
-        const emailSubject = "Approval Request for Local Leaders";
-        const htmlBody = `
-        <p>Dear ${process.env.GName},</p>
-        <p>I kindly request your approval for the following individual as a local leader:</p>
-        <p><strong>Name:</strong> John Doe</p>
-        <p><strong>Role:</strong> Mutwarasibo</p>
-        <p><strong>Location:</strong> Indashyikirwa</p>
-        <p>
-            Please confirm their role by clicking one of the options below:
-        </p>
-        <table>
-            <tr>
-                <td>
-                    <a href="http://localhost:2005/api_docs/CaseChain/user/approve?userId=${newPendingUser.id}&status=yes"
-                        style="background-color: green; padding: 10px 20px; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">
-                        Approve
-                    </a>
-                </td>
-                <td style="width: 20px;"></td>
-                <td>
-                    <a href="http://localhost:2005/CaseChain/user/approve?userId=${newPendingUser.id}&status=no"
-                        style="background-color: red; padding: 10px 20px; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">
-                        Reject
-                    </a>
-                </td>
-            </tr>
-        </table>
-        <p>Thank you,<br>Case Chain Team</p>
-    `;
-    
-        await sendEmail(emailRecipient, emailSubject, htmlBody);
-
-        return res.status(201).json({
-            message: "Account is pending approval by Gitifu.",
-            user: newPendingUser
-        });
-    }
-
     // If user is not a local leader, create normal user account
     const newUser = new UserModel({
         FullName: req.body.FullName,
@@ -193,7 +128,7 @@ export const SignIn=asyncWrapper(async(req,res,next)=>
         return next(new BadRequestError('Invalid Password'))
     }
     //Generate token
-    const token = jwt.sign({id:FoundUser.id,Email:FoundUser.Email,NationalId:FoundUser.NationalId},process.env.JWT_SECRET_KEY, {expiresIn:'24h'});
+    const token = jwt.sign({id:FoundUser.id,Email:FoundUser.Email,NationalId:FoundUser.NationalID,UserType:FoundUser.UserType},process.env.JWT_SECRET_KEY, {expiresIn:'24h'});
 
     res.status(200).json({
         message:"User account verified!",

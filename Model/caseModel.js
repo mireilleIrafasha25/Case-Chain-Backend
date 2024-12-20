@@ -1,32 +1,17 @@
-import mongoose from "mongoose";
-const schema=mongoose.Schema;
+import  mongoose from 'mongoose';
 
-const caseSchema = new schema({
-
-   
-  caseTitle: { type: String, required: true },
+const caseSchema = new mongoose.Schema({
+  title: { type: String, required: true },
   description: { type: String, required: true },
-  status: {
-    type: String,
-    enum: ['pending', 'under review', 'resolved', 'closed'],
-    default: 'pending'
-  },
-  caseOuner: { type: String, required: true}, // National Id will be provided here
-  currentLevel: {
-    type: String,
-    enum: [ 'Mutwarasibo', 'Mudugudu',"Umuturage"],
-    required: true
-  },
-  expected_resolution_date:{type :Date, default: Date.now()+7*24*60*60*1000},
-  assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },  // Who is handling the case
-  updates: [{ 
-    updateBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    updateText: { type: String },
-    timestamp: { type: Date, default: Date.now }
-  }],
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-})
-const CaseModel=mongoose.model("Case",caseSchema);
+  ownerNationalId: { type: String, required: true },
+  submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  status: { type: String, enum: ['New', 'In Progress', 'Escalated', 'Resolved'], default: 'New' },
+  priority: { type: String, enum: ['Low', 'Medium', 'High'], default: 'Medium' },
+  assignedTo: { type: String, default: 'Local Authority' },
+  escalationLevel: { type: Number, default: 0 },
+  submittedDate: { type: Date, default: Date.now },
+  lastUpdated: { type: Date, default: Date.now },
+});
 
+const CaseModel = mongoose.model('Case', caseSchema);
 export default CaseModel;
