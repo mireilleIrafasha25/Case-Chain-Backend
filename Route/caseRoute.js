@@ -1,11 +1,12 @@
 import express from 'express';
-import { createCase, getAllCases, updateCase, deleteCase } from '../controller/caseController.js';
-//import authMiddleware from '../middleware/authMiddleware';
-const router = express.Router();
+import {addCase, getAllCase,getCaseDetails, updateCase} from "../controller/caseController.js"
+import {validateNewCase} from "../Utils/validation.js"
+import {authenticateToken} from "../Middleware/authethicateToken.js"
 
-router.post('/addCase', createCase);
-router.get('/getAllcase', getAllCases);
-router.put('/updateCase/:id', updateCase);
-router.delete('/deleteCase/:id', deleteCase);
+const route = express.Router()
+ route.post("/addCase",authenticateToken,validateNewCase,addCase)
+ route.get("/getAllCase",getAllCase)
+ route.get("/getCaseById/:id",getCaseDetails)
+ route.patch("/updateCase/:id",authenticateToken,updateCase)
 
-export default  router;
+ export default route;
